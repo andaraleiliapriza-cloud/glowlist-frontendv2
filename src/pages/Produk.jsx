@@ -28,6 +28,9 @@ export default function Produk() {
       try {
         const res = await fetch(`http://localhost:3001/produk/${id}`, {
           method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
         });
 
         if (res.ok) {
@@ -65,6 +68,7 @@ export default function Produk() {
         <thead className="table-primary">
           <tr>
             <th>ID</th>
+            <th>Gambar</th>
             <th>Judul</th>
             <th>Deskripsi</th>
             <th>Harga</th>
@@ -77,9 +81,28 @@ export default function Produk() {
             produk.map((item) => (
               <tr key={item.id_produk}>
                 <td>{item.id_produk}</td>
+
+                {/* GAMBAR PRODUK */}
+                <td>
+                  {item.nama_file ? (
+                    <img
+                      src={`http://localhost:3001/uploads/${item.nama_file}`}
+                      alt={item.judul}
+                      style={{
+                        width: "100px",
+                        height: "100px",
+                        objectFit: "cover",
+                      }}
+                    />
+                  ) : (
+                    <span>Tidak ada gambar</span>
+                  )}
+                </td>
+
                 <td>{item.judul}</td>
                 <td>{item.deskripsi}</td>
                 <td>Rp {item.harga}</td>
+
                 <td>
                   <button
                     className="btn btn-warning btn-sm me-2"
@@ -99,7 +122,7 @@ export default function Produk() {
             ))
           ) : (
             <tr>
-              <td colSpan="5" className="text-center">
+              <td colSpan="6" className="text-center">
                 Belum ada produk
               </td>
             </tr>
